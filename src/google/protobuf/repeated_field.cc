@@ -65,9 +65,6 @@ void** RepeatedPtrFieldBase::InternalExtend(int extend_amount) {
     rep_ = reinterpret_cast<Rep*>(
         ::google::protobuf::Arena::CreateArray<char>(arena, bytes));
   }
-#if defined(__GXX_DELETE_WITH_SIZE__) || defined(__cpp_sized_deallocation)
-  const int old_total_size = total_size_;
-#endif
   total_size_ = new_size;
   if (old_rep && old_rep->allocated_size > 0) {
     memcpy(rep_->elements, old_rep->elements,
@@ -77,13 +74,7 @@ void** RepeatedPtrFieldBase::InternalExtend(int extend_amount) {
     rep_->allocated_size = 0;
   }
   if (arena == NULL) {
-#if defined(__GXX_DELETE_WITH_SIZE__) || defined(__cpp_sized_deallocation)
-    const size_t old_size =
-        old_total_size * sizeof(rep_->elements[0]) + kRepHeaderSize;
-    ::operator delete(static_cast<void*>(old_rep), old_size);
-#else
     ::operator delete(static_cast<void*>(old_rep));
-#endif
   }
   return &rep_->elements[current_size_];
 }

@@ -311,12 +311,7 @@ class RepeatedField PROTOBUF_FINAL {
         e->~Element();
       }
       if (rep->arena == NULL) {
-#if defined(__GXX_DELETE_WITH_SIZE__) || defined(__cpp_sized_deallocation)
-        const size_t bytes = size * sizeof(*e) + kRepHeaderSize;
-        ::operator delete(static_cast<void*>(rep), bytes);
-#else
         ::operator delete(static_cast<void*>(rep));
-#endif
       }
     }
   }
@@ -1472,12 +1467,7 @@ void RepeatedPtrFieldBase::Destroy() {
     for (int i = 0; i < n; i++) {
       TypeHandler::Delete(cast<TypeHandler>(elements[i]), NULL);
     }
-#if defined(__GXX_DELETE_WITH_SIZE__) || defined(__cpp_sized_deallocation)
-    const size_t size = total_size_ * sizeof(elements[0]) + kRepHeaderSize;
-    ::operator delete(static_cast<void*>(rep_), size);
-#else
     ::operator delete(static_cast<void*>(rep_));
-#endif
   }
   rep_ = NULL;
 }

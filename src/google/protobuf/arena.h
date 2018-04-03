@@ -75,12 +75,8 @@ template<typename T> void arena_delete_object(void* object) {
   delete reinterpret_cast<T*>(object);
 }
 inline void arena_free(void* object, size_t size) {
-#if defined(__GXX_DELETE_WITH_SIZE__) || defined(__cpp_sized_deallocation)
-  ::operator delete(object, size);
-#else
   (void)size;
   ::operator delete(object);
-#endif
 }
 
 }  // namespace internal
